@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tickets a la Isla — Registrate</title>
+<style>
+  :root {
+    --bg: #0b1d2a;
+    --bg-2: #10293a;
+    --card: #ffffff;
+    --text: #0b1d2a;
+    --muted: #5a7183;
+    --accent: #ff6b4a;
+    --accent-2: #ffb347;
+    --teal: #17a398;
+    --border: #e3e9ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(ellipse 90% 55% at 50% -10%, rgba(255,140,90,.22), transparent),
+      radial-gradient(ellipse 60% 45% at 85% 110%, rgba(23,163,152,.18), transparent),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .8s ease, transform .8s cubic-bezier(.22,.61,.36,1); }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ---------- Header ---------- */
+  header {
+    width: 100%;
+    padding: 1.4rem 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-weight: 800; font-size: 1.25rem; color: #fff; letter-spacing: .5px; }
+  .brand span { color: var(--accent); }
+  .brand small { display: block; font-size: .65rem; font-weight: 500; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+
+  /* ---------- Hero ---------- */
+  .hero { text-align: center; padding: 2rem 5vw 1rem; max-width: 720px; }
+  .hero .badge {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px;
+    padding: .4rem 1.1rem;
+    font-size: .75rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.85);
+    margin-bottom: 1.4rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.05;
+    letter-spacing: -1px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p { color: rgba(255,255,255,.7); margin-top: 1.2rem; font-size: 1.05rem; }
+
+  /* ---------- Ticket ---------- */
+  .ticket-wrap { width: min(680px, 92vw); margin: 2.5rem auto 4rem; }
+  .ticket {
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    overflow: hidden;
+    position: relative;
+  }
+  .ticket::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--teal));
+  }
+  .ticket-head {
+    padding: 1.6rem 2rem .4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dashed var(--border);
+    position: relative;
+  }
+  .ticket-head .pass-type { font-size: .75rem; font-weight: 800; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
+  .ticket-head .seat { font-family: 'Courier New', monospace; font-size: .8rem; color: var(--muted); }
+  .ticket-body { padding: 1.4rem 2rem 1.8rem; }
+
+  .field { margin-bottom: 1.1rem; }
+  .field label {
+    display: block;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .4rem;
+  }
+  .field input, .field select {
+    width: 100%;
+    padding: .85rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--text);
+    background: #fafbfc;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .field input:focus, .field select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255,107,74,.12);
+  }
+  .field .hint { font-size: .78rem; color: var(--muted); margin-top: .3rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(90deg, var(--accent), #ff8a5c);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+    box-shadow: 0 10px 26px rgba(255,107,74,.35);
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(255,107,74,.45); }
+  .btn:disabled { opacity: .6; cursor: wait; }
+
+  .form-msg {
+    margin-top: 1rem;
+    padding: .9rem 1.1rem;
+    border-radius: 10px;
+    font-size: .9rem;
+    display: none;
+    text-align: center;
+  }
+  .form-msg.ok { display: block; background: #e6f6ef; color: #1d7a4f; border: 1px solid #bfe6d2; }
+  .form-msg.err { display: block; background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c4; }
+  .form-msg.warn { display: block; background: #fff7e6; color: #8a5a00; border: 1px solid #f0dcae; }
+
+  .fine { text-align: center; font-size: .78rem; color: var(--muted); margin-top: 1rem; }
+
+  /* ---------- Goals ---------- */
+  .goals { width: min(680px, 92vw); margin: 0 auto 4rem; }
+  .goals h2 {
+    text-align: center;
+    color: #fff;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    letter-spacing: .5px;
+    margin-bottom: .4rem;
+  }
+  .goals .goals-sub { text-align: center; color: rgba(255,255,255,.65); font-size: .95rem; margin-bottom: 2rem; }
+  .goals-list { display: flex; flex-direction: column; gap: 0; }
+  .goal {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    backdrop-filter: blur(6px);
+    transition: transform .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .goal:first-child { border-radius: 14px 14px 0 0; }
+  .goal:last-child  { border-radius: 0 0 14px 14px; }
+  .goal + .goal { border-top: none; }
+  .goal:hover { transform: translateX(6px); border-color: rgba(255,179,71,.5); background: rgba(255,255,255,.08); }
+  .goal .k {
+    flex-shrink: 0;
+    min-width: 64px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 10px;
+    padding: .45rem .6rem;
+    letter-spacing: .5px;
+  }
+  .goal .r { color: rgba(255,255,255,.9); font-size: .98rem; font-weight: 600; }
+  .goal .r small { display: block; color: rgba(255,255,255,.5); font-weight: 400; font-size: .8rem; }
+  .goal.final .k { background: linear-gradient(135deg, var(--teal), #4fd1c5); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    width: 100%;
+    padding: 1.6rem 5vw 2.2rem;
+    text-align: center;
+    color: rgba(255,255,255,.4);
+    font-size: .8rem;
+    margin-top: auto;
+  }
+
+  @media (max-width: 560px) {
+    .row2 { grid-template-columns: 1fr; }
+    .ticket-head, .ticket-body { padding-left: 1.3rem; padding-right: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="reveal">
+  <div class="brand">TICKETS<span>A LA ISLA</span><small>Registro de interés</small></div>
+</header>
+
+<main>
+  <section class="hero reveal">
+    <span class="badge">🎫 Embarque próximamente</span>
+    <h1>¿Querés ser parte de <em>la próxima aventura</em>?</h1>
+    <p>Dejanos tus datos y te avisamos cuando se habilite tu lugar.</p>
+  </section>
+
+  <div class="ticket-wrap reveal">
+    <div class="ticket">
+      <div class="ticket-head">
+        <span class="pass-type">Boarding Pass · VIP</span>
+        <span class="seat" id="seatNo">ASIENTO —</span>
+      </div>
+      <form class="ticket-body" id="regForm" novalidate>
+        <div class="row2">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="tu@email.com" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ig">Tu @ de Instagram</label>
+          <input type="text" id="ig" placeholder="@tunick" required>
+          <div class="hint">Sin espacios ni links — solo tu usuario exacto.</div>
+        </div>
+        <button type="submit" class="btn" id="submitBtn">Reservar mi lugar</button>
+        <div class="form-msg" id="formMsg"></div>
+        <p class="fine">Al registrarte aceptás ser contactado por email o Instagram cuando se habiliten los cupos.</p>
+      </form>
+    </div>
+  </div>
+
+  <section class="goals reveal">
+    <h2>🎯 Objetivos de seguidores</h2>
+    <p class="goals-sub">Cada meta alcanzada desbloquea una nueva expansión de la isla.</p>
+    <div class="goals-list">
+      <div class="goal"><span class="k">1K</span><span class="r">Ampliación de la isla<small>Nuevos terrenos desbloqueados</small></span></div>
+      <div class="goal"><span class="k">2K</span><span class="r">Ampliación de la isla + casas<small>Se habilitan construcciones residenciales</small></span></div>
+      <div class="goal"><span class="k">5K</span><span class="r">Desbloqueo de una deidad<small>Poder ancestral al servicio de la isla</small></span></div>
+      <div class="goal"><span class="k">10K</span><span class="r">Ampliación Atlántida<small>La isla se expande hacia el océano</small></span></div>
+      <div class="goal final"><span class="k">20K</span><span class="r">Ampliación lunar<small>La isla llega a la Luna 🌕</small></span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="reveal">© 2025 Tickets a la Isla — Proyecto demostrativo</footer>
+
+<script>
+  // ---------- Config ----------
+  // Pegá acá la URL de tu Google Apps Script (ver README.md sección "Backend")
+  const SHEET_ENDPOINT = 'PONER_URL_APPS_SCRIPT_AQUI';
+
+  // ---------- UI helpers ----------
+  const form = document.getElementById('regForm');
+  const msg = document.getElementById('formMsg');
+  const btn = document.getElementById('submitBtn');
+  const seatNo = document.getElementById('seatNo');
+
+  seatNo.textContent = 'ASIENTO ' + String(Math.floor(100 + Math.random() * 900));
+
+  function showMsg(text, type) {
+    msg.textContent = text;
+    msg.className = 'form-msg ' + type;
+  }
+
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+  function normalizeIg(v) {
+    return v.trim().replace(/^@+/, '').replace(/\s+/g, '').toLowerCase();
+  }
+
+  // ---------- Submit ----------
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showMsg('', '');
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const ig = normalizeIg(document.getElementById('ig').value);
+
+    if (!nombre || !email || !ig) {
+      return showMsg('Completá todos los campos para reservar tu lugar.', 'err');
+    }
+    if (!isValidEmail(email)) {
+      return showMsg('El email no parece válido.', 'err');
+    }
+    if (ig.length < 2) {
+      return showMsg('Ingresá tu usuario de Instagram correcto.', 'err');
+    }
+
+    const payload = {
+      nombre, email,
+      instagram: '@' + ig,
+      fecha: new Date().toISOString()
+    };
+
+    btn.disabled = true;
+    btn.textContent = 'Embarcando…';
+
+    // 1) Intentar guardar en Google Sheets (Apps Script)
+    if (SHEET_ENDPOINT && SHEET_ENDPOINT !== 'PONER_URL_APPS_SCRIPT_AQUI') {
+      try {
+        await fetch(SHEET_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        btn.textContent = 'Reservar mi lugar';
+        btn.disabled = false;
+        form.reset();
+        return showMsg('🎉 ¡Listo! Tu lugar quedó reservado. Te contactamos pronto.', 'ok');
+      } catch (err) {
+        // cae al fallback local
+      }
+    }
+
+    // 2) Fallback: guardar en localStorage (visible en el navegador)
+    try {
+      const regs = JSON.parse(localStorage.getItem('tickets_isla_regs') || '[]');
+      regs.push(payload);
+      localStorage.setItem('tickets_isla_regs', JSON.stringify(regs));
+      btn.textContent = 'Reservar mi lugar';
+      btn.disabled = false;
+      form.reset();
+      showMsg('⚠️ Guardado localmente (modo demo). Configurá el backend para persistir en Google Sheets — ver README.', 'warn');
+    } catch (err) {
+      btn.textContent = 'Reservar mi lugar';
+      btn.disabled = false;
+      showMsg('Hubo un error guardando tus datos. Intentá de nuevo.', 'err');
+    }
+  });
+
+  // ---------- Scroll reveal ----------
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
