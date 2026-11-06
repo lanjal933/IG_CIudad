@@ -1,4 +1,4 @@
-# IG_Ciudad — Tickets a la Isla
+# IG_CIudad
 
 Landing page de registro/tickets. Los usuarios dejan su **nombre, email y @ de Instagram**, y quedan guardados en una planilla.
 
